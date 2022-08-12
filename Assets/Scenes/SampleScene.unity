@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 1457802103}
   - component: {fileID: 1457802107}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Digigrammer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -461,6 +461,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87473072349d07540955eebe9b8b544d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  computeShader: {fileID: 7200000, guid: 64b76ea0363745641b579c69c6219d44, type: 3}
-  mask: {fileID: 2800000, guid: 08a946dc2fead94439f9999aa1e71ae3, type: 3}
   digigram: {fileID: 11400000, guid: 5c52331a647555742be665c4f085474c, type: 2}
