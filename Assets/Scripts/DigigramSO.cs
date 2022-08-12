@@ -1,3 +1,4 @@
+using Assets.Scripts.MessageBroker;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,9 @@ using UnityEngine;
 
 public class DigigramSO : ScriptableObject
 {
+    [SerializeField] private Messenger messenger;
+
+    [HideInInspector]
     public RenderTexture Texture;
 
     public Vector2Int TextureSize = new (1080, 1080);

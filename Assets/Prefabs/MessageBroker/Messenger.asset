@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f5420b9ceb2b6d4e81e83d5d9af65d7, type: 3}
-  m_Name: Digigram
+  m_Script: {fileID: 11500000, guid: 38303b36aa7ed2b478727ecc422c6218, type: 3}
+  m_Name: Messenger
   m_EditorClassIdentifier: 
-  messenger: {fileID: 11400000, guid: 5a57617019ba0eb41bda7dfcc9439562, type: 2}
-  Texture: {fileID: 0}
-  TextureSize: {x: 1080, y: 1080}
-  BitsPerChannel: 16
+  UpdateTexture: {fileID: 11400000, guid: 3195aecd57d4cbc42a10181042f24364, type: 2}

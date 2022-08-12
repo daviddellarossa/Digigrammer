@@ -462,3 +462,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   digigram: {fileID: 11400000, guid: 5c52331a647555742be665c4f085474c, type: 2}
+  messenger: {fileID: 11400000, guid: 5a57617019ba0eb41bda7dfcc9439562, type: 2}

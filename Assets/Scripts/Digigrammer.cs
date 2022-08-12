@@ -1,4 +1,5 @@
 using Assets.Scripts.Agents.Agent1;
+using Assets.Scripts.MessageBroker;
 using Assets.Scripts.Scheduler;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using UnityEngine.UI;
 public class Digigrammer : MonoBehaviour
 {
     [SerializeField] private DigigramSO digigram;
+    [SerializeField] private Messenger messenger;
 
     private RawImage rawImage;
 
