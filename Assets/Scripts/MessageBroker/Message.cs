@@ -6,6 +6,7 @@ namespace Assets.Scripts.MessageBroker
     [CreateAssetMenu(menuName = "Digigrammer/MessageBroker/Message", fileName = "New Message")]
     public class Message : ScriptableObject
     {
+        public string Tooltip;
         public event Action<object, string, object> MessageEvent;
 
         public void SendMessage(object sender, string target, object payload)

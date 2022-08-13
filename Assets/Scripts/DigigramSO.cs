@@ -1,6 +1,4 @@
 using Assets.Scripts.MessageBroker;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Digigrammer/Digigram", fileName = "Digigram")]
@@ -21,5 +19,6 @@ public class DigigramSO : ScriptableObject
     public void InitializeTexture()
     {
         this.Texture = new RenderTexture(this.TextureSize.x, this.TextureSize.y, this.BitsPerChannel * Channels);
+        messenger.UpdateTexture.SendMessage(this, null, this.Texture);
     }
 }

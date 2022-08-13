@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.MessageBroker
 {
@@ -7,5 +8,7 @@ namespace Assets.Scripts.MessageBroker
     public class Messenger : ScriptableObject
     {
         public Message UpdateTexture;
+
+        public List<Message> messages;
     }
 }

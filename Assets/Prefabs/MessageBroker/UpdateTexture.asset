@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f902efb30b3452b4f870fb08851939dd, type: 3}
   m_Name: UpdateTexture
   m_EditorClassIdentifier: 
+  Tooltip: Event raised when the texture is updated

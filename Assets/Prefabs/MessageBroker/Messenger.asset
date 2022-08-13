@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Messenger
   m_EditorClassIdentifier: 
   UpdateTexture: {fileID: 11400000, guid: 3195aecd57d4cbc42a10181042f24364, type: 2}
+  messages:
+  - {fileID: 11400000, guid: 3195aecd57d4cbc42a10181042f24364, type: 2}
