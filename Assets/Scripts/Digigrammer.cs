@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class Digigrammer : MonoBehaviour
 {
     [SerializeField] private DigigramSO digigram;
-    [SerializeField] private Messenger messenger;
+    [SerializeField] private MessageBroker messenger;
 
     private RawImage rawImage;
 

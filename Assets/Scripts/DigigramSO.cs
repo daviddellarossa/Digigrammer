@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DigigramSO : ScriptableObject
 {
-    [SerializeField] private Messenger messenger;
+    [SerializeField] private MessageBroker messenger;
 
     [HideInInspector]
     public RenderTexture Texture;
@@ -19,6 +19,6 @@ public class DigigramSO : ScriptableObject
     public void InitializeTexture()
     {
         this.Texture = new RenderTexture(this.TextureSize.x, this.TextureSize.y, this.BitsPerChannel * Channels);
-        messenger.UpdateTexture.SendMessage(this, null, this.Texture);
+        //messenger.UpdateTexture.SendMessage(this, null, this.Texture);
     }
 }

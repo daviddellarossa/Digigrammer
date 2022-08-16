@@ -1,50 +1,35 @@
 ﻿using System;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-namespace Assets.Scripts.MessageBroker
+namespace Assets.Scripts.EventTrigger
 {
-    [CustomEditor(typeof(MessageSubscriber))]
-    [CanEditMultipleObjects]
-    public class MessageSubscriberEditor : Editor
+
+    [CustomEditor(typeof(MyEventTrigger), true)]
+    public class MyEventTriggerEditor : Editor
     {
         SerializedProperty m_DelegatesProperty;
 
         GUIContent m_IconToolbarMinus;
         GUIContent m_EventIDName;
-
-        //(Name, Tooltip) array of events, extracted by MessageBroker
         GUIContent[] m_EventTypes;
-
-        RequestMessage[] requestMessages;
-
-        GUIContent m_AddButtonContent;
-
-        private MessageBroker messenger;
-
+        GUIContent m_AddButonContent;
 
         protected virtual void OnEnable()
         {
-            this.messenger = FindMessageBroker();
-
             m_DelegatesProperty = serializedObject.FindProperty("m_Delegates");
-            m_AddButtonContent = EditorGUIUtility.TrTextContent("Add New Event Type");
+            m_AddButonContent = EditorGUIUtility.TrTextContent("Add New Event Type");
             m_EventIDName = new GUIContent("");
             // Have to create a copy since otherwise the tooltip will be overwritten.
             m_IconToolbarMinus = new GUIContent(EditorGUIUtility.IconContent("Toolbar Minus"));
             m_IconToolbarMinus.tooltip = "Remove all events in this list.";
 
-            PopulateEventTypes();
-        }
-
-
-        private void PopulateEventTypes()
-        {
-            requestMessages = messenger.messages.OrderBy(x => x.name).ToArray();
-
-            m_EventTypes = requestMessages.Select(x => new GUIContent(x.name, x.Tooltip)).ToArray();
+            string[] eventNames = Enum.GetNames(typeof(UnityEngine.EventSystems.EventTriggerType));
+            m_EventTypes = new GUIContent[eventNames.Length];
+            for (int i = 0; i < eventNames.Length; ++i)
+            {
+                m_EventTypes[i] = new GUIContent(eventNames[i]);
+            }
         }
 
         public override void OnInspectorGUI()
@@ -59,11 +44,10 @@ namespace Assets.Scripts.MessageBroker
             for (int i = 0; i < m_DelegatesProperty.arraySize; ++i)
             {
                 SerializedProperty delegateProperty = m_DelegatesProperty.GetArrayElementAtIndex(i);
-                SerializedProperty eventProperty = delegateProperty.FindPropertyRelative("message");
+                SerializedProperty eventProperty = delegateProperty.FindPropertyRelative("eventID");
                 SerializedProperty callbacksProperty = delegateProperty.FindPropertyRelative("callback");
-                SerializedProperty messageName = eventProperty.FindPropertyRelative("Tooltip");
-                m_EventIDName.text = eventProperty.objectReferenceValue.name; 
-                m_EventIDName.tooltip = messageName
+                m_EventIDName.text = eventProperty.enumDisplayNames[eventProperty.enumValueIndex];
+
                 EditorGUILayout.PropertyField(callbacksProperty, m_EventIDName);
                 Rect callbackRect = GUILayoutUtility.GetLastRect();
 
@@ -81,11 +65,11 @@ namespace Assets.Scripts.MessageBroker
                 RemoveEntry(toBeRemovedEntry);
             }
 
-            Rect btPosition = GUILayoutUtility.GetRect(m_AddButtonContent, GUI.skin.button);
+            Rect btPosition = GUILayoutUtility.GetRect(m_AddButonContent, GUI.skin.button);
             const float addButonWidth = 200f;
             btPosition.x = btPosition.x + (btPosition.width - addButonWidth) / 2;
             btPosition.width = addButonWidth;
-            if (GUI.Button(btPosition, m_AddButtonContent))
+            if (GUI.Button(btPosition, m_AddButonContent))
             {
                 ShowAddTriggermenu();
             }
@@ -110,7 +94,7 @@ namespace Assets.Scripts.MessageBroker
                 for (int p = 0; p < m_DelegatesProperty.arraySize; ++p)
                 {
                     SerializedProperty delegateEntry = m_DelegatesProperty.GetArrayElementAtIndex(p);
-                    SerializedProperty eventProperty = delegateEntry.FindPropertyRelative("message");
+                    SerializedProperty eventProperty = delegateEntry.FindPropertyRelative("eventID");
                     if (eventProperty.enumValueIndex == i)
                     {
                         active = false;
@@ -131,25 +115,9 @@ namespace Assets.Scripts.MessageBroker
 
             m_DelegatesProperty.arraySize += 1;
             SerializedProperty delegateEntry = m_DelegatesProperty.GetArrayElementAtIndex(m_DelegatesProperty.arraySize - 1);
-            SerializedProperty eventProperty = delegateEntry.FindPropertyRelative("message");
-            eventProperty.objectReferenceValue = requestMessages[selected];
-            //eventProperty.enumValueIndex = selected;
+            SerializedProperty eventProperty = delegateEntry.FindPropertyRelative("eventID");
+            eventProperty.enumValueIndex = selected;
             serializedObject.ApplyModifiedProperties();
-        }
-
-        private MessageBroker FindMessageBroker()
-        {
-            var assetIds = AssetDatabase.FindAssets("MessageBroker");
-            foreach (var assetId in assetIds)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(assetId);
-                var asset = AssetDatabase.LoadAssetAtPath<MessageBroker>(path);
-                if (asset != null)
-                {
-                    return asset;
-                }
-            }
-            return null;
         }
     }
 }
