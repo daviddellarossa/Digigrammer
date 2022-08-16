@@ -63,7 +63,7 @@ namespace Assets.Scripts.MessageBroker
                 SerializedProperty callbacksProperty = delegateProperty.FindPropertyRelative("callback");
                 SerializedProperty messageName = eventProperty.FindPropertyRelative("Tooltip");
                 m_EventIDName.text = eventProperty.objectReferenceValue.name; 
-                m_EventIDName.tooltip = messageName
+
                 EditorGUILayout.PropertyField(callbacksProperty, m_EventIDName);
                 Rect callbackRect = GUILayoutUtility.GetLastRect();
 

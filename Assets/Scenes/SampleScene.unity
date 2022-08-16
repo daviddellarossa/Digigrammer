@@ -523,24 +523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - message: {fileID: 11400000, guid: 41ab45e2a1e32564fb7a54f256d35afc, type: 2}
-    Tooltip: 
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 924097588}
-          m_TargetAssemblyTypeName: Assets.Scripts.MessageBroker.MessageSubscriberTest,
-            Assembly-CSharp
-          m_MethodName: MessageHandler
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  - {fileID: 11400000, guid: 41ab45e2a1e32564fb7a54f256d35afc, type: 2}
 --- !u!1 &1457802102
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,8 +657,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - message: {fileID: 0}
-    Tooltip: Tooltip
-    callback:
-      m_PersistentCalls:
-        m_Calls: []
+  - {fileID: 0}

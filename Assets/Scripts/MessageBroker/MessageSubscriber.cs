@@ -183,7 +183,7 @@ namespace Assets.Scripts.MessageBroker
         {
             foreach(var m in m_Delegates)    
             {
-                m.message.MessageUnityEvent.AddListener(Execute);
+                m.message.MessageEvent.AddListener(Execute);
                 //m.callback.AddListener(Execute);
             }
         }
@@ -192,7 +192,7 @@ namespace Assets.Scripts.MessageBroker
         {
             foreach (var m in m_Delegates)
             {
-                m.message.MessageUnityEvent.RemoveAllListeners();
+                m.message.MessageEvent.RemoveAllListeners();
                 //m.callback.RemoveAllListeners();
             }
         }

@@ -9,7 +9,7 @@ namespace Assets.Scripts.MessageBroker
     {
         public string Tooltip;
         //public event Func<object, string, object, object> Message;
-        public RequestMessageEvent MessageUnityEvent;
+        public RequestMessageEvent MessageEvent;
 
         public object SendMessage()
         {
@@ -21,7 +21,7 @@ namespace Assets.Scripts.MessageBroker
                 payload = payload,
             };
             Debug.Log("Invoking unityEvent");
-            MessageUnityEvent.Invoke(messagePayload);
+            MessageEvent.Invoke(messagePayload);
             return messagePayload.response;
         }
     }

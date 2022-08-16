@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a592b29a3970048b7929ae71ab9492, type: 3}
   m_Name: RequestMessage2
   m_EditorClassIdentifier: 
-  Tooltip: 
+  Tooltip: Tooltip for Request Message 2
+  MessageEvent:
+    m_PersistentCalls:
+      m_Calls: []
