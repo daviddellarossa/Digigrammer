@@ -22,13 +22,9 @@ namespace Assets.Scripts.MessageBroker
 
         GUIContent m_AddButtonContent;
 
-        private MessageBroker messenger;
-
 
         protected virtual void OnEnable()
         {
-            this.messenger = FindMessageBroker();
-
             m_DelegatesProperty = serializedObject.FindProperty(nameof(MessageSubscriber.Messages));
             m_AddButtonContent = EditorGUIUtility.TrTextContent("Add New Event Type");
             m_EventIDName = new GUIContent("");
@@ -36,15 +32,23 @@ namespace Assets.Scripts.MessageBroker
             m_IconToolbarMinus = new GUIContent(EditorGUIUtility.IconContent("Toolbar Minus"));
             m_IconToolbarMinus.tooltip = "Remove all events in this list.";
 
-            PopulateEventTypes();
+            requestMessages = GetAllMessages();
+
+            m_EventTypes = requestMessages.Select(x => new GUIContent(x.name, x.Tooltip)).ToArray();
         }
 
 
-        private void PopulateEventTypes()
+        private RequestMessage[] GetAllMessages()
         {
-            requestMessages = messenger.messages.OrderBy(x => x.name).ToArray();
+            string[] guids = AssetDatabase.FindAssets("t:" + typeof(RequestMessage).Name);  //FindAssets uses tags check documentation for more info
+            var a = new RequestMessage[guids.Length];
+            for (int i = 0; i < guids.Length; i++)         //probably could get optimized 
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guids[i]);
+                a[i] = AssetDatabase.LoadAssetAtPath<RequestMessage>(path);
+            }
 
-            m_EventTypes = requestMessages.Select(x => new GUIContent(x.name, x.Tooltip)).ToArray();
+            return a;
         }
 
         public override void OnInspectorGUI()
@@ -138,21 +142,6 @@ namespace Assets.Scripts.MessageBroker
             SerializedProperty messageProperty = delegateEntry.FindPropertyRelative(nameof(MessageSubscriber.Entry.Message));
             messageProperty.objectReferenceValue = requestMessages[selected];
             serializedObject.ApplyModifiedProperties();
-        }
-
-        private MessageBroker FindMessageBroker()
-        {
-            var assetIds = AssetDatabase.FindAssets(nameof(MessageBroker));
-            foreach (var assetId in assetIds)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(assetId);
-                var asset = AssetDatabase.LoadAssetAtPath<MessageBroker>(path);
-                if (asset != null)
-                {
-                    return asset;
-                }
-            }
-            return null;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Assets.Scripts.Scheduler
     [Serializable]
     public class Scheduler
     {
-        [SerializeField] private MessageBroker.MessageBroker Messenger;
+        //[SerializeField] private MessageBroker.MessageBroker Messenger;
 
         public ScheduleSO schedule;
 
