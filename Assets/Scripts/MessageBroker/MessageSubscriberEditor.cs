@@ -29,7 +29,7 @@ namespace Assets.Scripts.MessageBroker
         {
             this.messenger = FindMessageBroker();
 
-            m_DelegatesProperty = serializedObject.FindProperty("m_Delegates");
+            m_DelegatesProperty = serializedObject.FindProperty(nameof(MessageSubscriber.Messages));
             m_AddButtonContent = EditorGUIUtility.TrTextContent("Add New Event Type");
             m_EventIDName = new GUIContent("");
             // Have to create a copy since otherwise the tooltip will be overwritten.
@@ -59,10 +59,14 @@ namespace Assets.Scripts.MessageBroker
             for (int i = 0; i < m_DelegatesProperty.arraySize; ++i)
             {
                 SerializedProperty delegateProperty = m_DelegatesProperty.GetArrayElementAtIndex(i);
-                SerializedProperty eventProperty = delegateProperty.FindPropertyRelative("message");
-                SerializedProperty callbacksProperty = delegateProperty.FindPropertyRelative("callback");
-                SerializedProperty messageName = eventProperty.FindPropertyRelative("Tooltip");
-                m_EventIDName.text = eventProperty.objectReferenceValue.name; 
+                SerializedProperty callbacksProperty = delegateProperty.FindPropertyRelative(nameof(MessageSubscriber.Entry.Callback));
+
+                SerializedProperty messageProperty = delegateProperty.FindPropertyRelative(nameof(MessageSubscriber.Entry.Message));
+                var messageInstance = messageProperty.objectReferenceValue;
+                var messageSerialized = new SerializedObject(messageInstance);
+
+                SerializedProperty messageName = messageSerialized.FindProperty(nameof(RequestMessage.Tooltip));
+                m_EventIDName.text = messageInstance.name; 
 
                 EditorGUILayout.PropertyField(callbacksProperty, m_EventIDName);
                 Rect callbackRect = GUILayoutUtility.GetLastRect();
@@ -110,7 +114,7 @@ namespace Assets.Scripts.MessageBroker
                 for (int p = 0; p < m_DelegatesProperty.arraySize; ++p)
                 {
                     SerializedProperty delegateEntry = m_DelegatesProperty.GetArrayElementAtIndex(p);
-                    SerializedProperty eventProperty = delegateEntry.FindPropertyRelative("message");
+                    SerializedProperty eventProperty = delegateEntry.FindPropertyRelative(nameof(MessageSubscriber.Entry.Message));
                     if (eventProperty.enumValueIndex == i)
                     {
                         active = false;
@@ -131,15 +135,14 @@ namespace Assets.Scripts.MessageBroker
 
             m_DelegatesProperty.arraySize += 1;
             SerializedProperty delegateEntry = m_DelegatesProperty.GetArrayElementAtIndex(m_DelegatesProperty.arraySize - 1);
-            SerializedProperty eventProperty = delegateEntry.FindPropertyRelative("message");
-            eventProperty.objectReferenceValue = requestMessages[selected];
-            //eventProperty.enumValueIndex = selected;
+            SerializedProperty messageProperty = delegateEntry.FindPropertyRelative(nameof(MessageSubscriber.Entry.Message));
+            messageProperty.objectReferenceValue = requestMessages[selected];
             serializedObject.ApplyModifiedProperties();
         }
 
         private MessageBroker FindMessageBroker()
         {
-            var assetIds = AssetDatabase.FindAssets("MessageBroker");
+            var assetIds = AssetDatabase.FindAssets(nameof(MessageBroker));
             foreach (var assetId in assetIds)
             {
                 var path = AssetDatabase.GUIDToAssetPath(assetId);

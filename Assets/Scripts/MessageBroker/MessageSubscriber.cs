@@ -143,13 +143,6 @@ namespace Assets.Scripts.MessageBroker
     public class MessageSubscriber :
         MonoBehaviour
     {
-        //[Serializable]
-        ///// <summary>
-        ///// UnityEvent class for Triggers.
-        ///// </summary>
-        //public class TriggerEvent : UnityEvent<BaseEventData>
-        //{ }
-
         [Serializable]
         public class RequestMessageEvent : UnityEvent<RequestMessagePayload> { }
 
@@ -162,18 +155,16 @@ namespace Assets.Scripts.MessageBroker
         /// </remarks>
         public class Entry
         {
-            public RequestMessage message;
-
-            public string Tooltip ="Tooltip";
+            public RequestMessage Message;
 
             /// <summary>
             /// The desired TriggerEvent to be Invoked.
             /// </summary>
-            public RequestMessageEvent callback = new RequestMessageEvent();
+            public RequestMessageEvent Callback = new RequestMessageEvent();
+
         }
 
-        [SerializeField]
-        private List<Entry> m_Delegates;
+        public List<Entry> Messages = new List<Entry>();
 
         protected MessageSubscriber()
         { 
@@ -181,49 +172,48 @@ namespace Assets.Scripts.MessageBroker
 
         private void Awake()
         {
-            foreach(var m in m_Delegates)    
+            foreach(var m in this.Messages)    
             {
-                m.message.MessageEvent.AddListener(Execute);
-                //m.callback.AddListener(Execute);
+                if(m == null)
+                {
+                    Debug.LogError("m is null");
+                    return;
+                }
+                else if (m.Message == null)
+                {
+                    Debug.LogError("m.message is null");
+                    return;
+                }
+                else if (m.Callback == null)
+                {
+                    Debug.LogError("m.callback is null");
+                    return;
+                }
+                else if (m.Message.MessageEvent == null)
+                {
+                    Debug.LogError("m.message.MessageEvent is null");
+                    return;
+                }
+
+                m.Message.MessageEvent = m.Callback;
             }
         }
 
-        private void OnDestroy()
-        {
-            foreach (var m in m_Delegates)
-            {
-                m.message.MessageEvent.RemoveAllListeners();
-                //m.callback.RemoveAllListeners();
-            }
-        }
-
-        private void Start()
-        {
-            
-        }
-
-
-        /// <summary>
-        /// All the functions registered in this MessageSubscriber
-        /// </summary>
-        public List<Entry> triggers
-        {
-            get
-            {
-                if (m_Delegates == null)
-                    m_Delegates = new List<Entry>();
-                return m_Delegates;
-            }
-            set 
-            { 
-                m_Delegates = value; 
-            }
-        }
-
-        private void Execute(RequestMessagePayload payload)
-        {
-            Debug.Log("Executing...");
-        }
+        ///// <summary>
+        ///// All the functions registered in this MessageSubscriber
+        ///// </summary>
+        //public List<Entry> triggers
+        //{
+        //    get
+        //    {
+        //        if (Delegates == null)
+        //            Delegates = new List<Entry>();
+        //        return Delegates;
+        //    }
+        //    set 
+        //    { 
+        //        Delegates = value; 
+        //    }
+        //}
     }
-
 }
