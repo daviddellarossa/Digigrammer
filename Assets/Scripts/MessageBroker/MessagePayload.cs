@@ -3,7 +3,7 @@
 namespace Assets.Scripts.MessageBroker
 {
     [Serializable]
-    public class RequestMessagePayload
+    public class MessagePayload
     {
         public object sender;
         public object target;

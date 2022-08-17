@@ -4,15 +4,15 @@ using static Assets.Scripts.MessageBroker.MessageSubscriber;
 
 namespace Assets.Scripts.MessageBroker
 {
-    [CreateAssetMenu(menuName = "Digigrammer/MessageBroker/RequestMessage", fileName = "New RequestMessage")]
-    public class RequestMessage : ScriptableObject
+    [CreateAssetMenu(menuName = "Digigrammer/MessageBroker/Message", fileName = "New Message")]
+    public class Message : ScriptableObject
     {
         public string Tooltip;
         public string Category = "Default";
 
         public RequestMessageEvent MessageEvent;
 
-        public object SendMessage(RequestMessagePayload payload)
+        public object SendMessage(MessagePayload payload)
         {
             Debug.Log("Invoking unityEvent");
             MessageEvent.Invoke(payload);

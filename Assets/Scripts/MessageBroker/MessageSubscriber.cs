@@ -144,7 +144,7 @@ namespace Assets.Scripts.MessageBroker
         MonoBehaviour
     {
         [Serializable]
-        public class RequestMessageEvent : UnityEvent<RequestMessagePayload> { }
+        public class RequestMessageEvent : UnityEvent<MessagePayload> { }
 
         [Serializable]
         /// <summary>
@@ -155,7 +155,7 @@ namespace Assets.Scripts.MessageBroker
         /// </remarks>
         public class Entry
         {
-            public RequestMessage Message;
+            public Message Message;
 
             /// <summary>
             /// The desired TriggerEvent to be Invoked.

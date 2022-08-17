@@ -18,7 +18,7 @@ namespace Assets.Scripts.MessageBroker
         //(Name, Tooltip) array of events, extracted by MessageBroker
         GUIContent[] m_EventTypes;
 
-        RequestMessage[] requestMessages;
+        Message[] requestMessages;
 
         GUIContent m_AddButtonContent;
 
@@ -38,14 +38,14 @@ namespace Assets.Scripts.MessageBroker
         }
 
 
-        private RequestMessage[] GetAllMessages()
+        private Message[] GetAllMessages()
         {
-            string[] guids = AssetDatabase.FindAssets("t:" + typeof(RequestMessage).Name);  //FindAssets uses tags check documentation for more info
-            var a = new RequestMessage[guids.Length];
+            string[] guids = AssetDatabase.FindAssets("t:" + typeof(Message).Name);  //FindAssets uses tags check documentation for more info
+            var a = new Message[guids.Length];
             for (int i = 0; i < guids.Length; i++)         //probably could get optimized 
             {
                 string path = AssetDatabase.GUIDToAssetPath(guids[i]);
-                a[i] = AssetDatabase.LoadAssetAtPath<RequestMessage>(path);
+                a[i] = AssetDatabase.LoadAssetAtPath<Message>(path);
             }
 
             return a;
@@ -69,7 +69,7 @@ namespace Assets.Scripts.MessageBroker
                 var messageInstance = messageProperty.objectReferenceValue;
                 var messageSerialized = new SerializedObject(messageInstance);
 
-                SerializedProperty messageName = messageSerialized.FindProperty(nameof(RequestMessage.Tooltip));
+                SerializedProperty messageName = messageSerialized.FindProperty(nameof(Message.Tooltip));
                 m_EventIDName.text = messageInstance.name; 
 
                 EditorGUILayout.PropertyField(callbacksProperty, m_EventIDName);

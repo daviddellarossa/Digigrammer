@@ -6,9 +6,9 @@ namespace Assets.Scripts.MessageBroker
 {
     public class MessageProducer : MonoBehaviour
     {
-        public RequestMessage message1;
+        public Message message1;
 
-        public RequestMessage message2;
+        public Message message2;
         // Start is called before the first frame update
         void Start()
         {
@@ -21,6 +21,8 @@ namespace Assets.Scripts.MessageBroker
             yield return new WaitForSeconds(5);
             object payload = "string";
             Debug.Log("Sending message1");
+
+            //var response1 = MessageBroker.Player.Send_RequestMessage1();
             //var response1 = message1.SendMessage();
             //Debug.Log(response1);
             yield return new WaitForSeconds(5);
