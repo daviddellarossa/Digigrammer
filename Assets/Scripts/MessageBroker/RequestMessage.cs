@@ -8,6 +8,7 @@ namespace Assets.Scripts.MessageBroker
     public class RequestMessage : ScriptableObject
     {
         public string Tooltip;
+        public string Category = "Default";
 
         public RequestMessageEvent MessageEvent;
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEditor;
+using UnityEngine;
 
 namespace Assets.Scripts.MessageBroker
 {
@@ -12,126 +13,43 @@ namespace Assets.Scripts.MessageBroker
         public static void OnPostprocessAllAsset(string[] importedAssets, string[] deletedAssets,
             string[] movedAssets, string[] movedFromAssetPaths)
         {
-            var gen = new MessageBrokerGenerator();
-            gen.Generate();
+            //var gen = new MessageBrokerTypeGenerator();
+            //gen.Generate();
         }
     }
-    internal class MessageBrokerGenerator
+
+    internal static class Indent
     {
-        public readonly string ClassName = "MessageBroker";
-        public readonly string Namespace = "Assets.Scripts.MessageBroker";
-        public readonly string OutputPath = $"Assets/Scripts/MessageBroker/MessageBroker.{0}.cs";
-        public readonly string NL = "\r\n";
+        private static int count = 0;
+        private static readonly char indChar = '\t';
 
-        private static class Indent
+        public static string Get() => new string(indChar, count);
+        public static string Push() { count++; return Get(); }
+        public static string Pop() { count--; count = Math.Max(0, count); return Get(); }
+    }
+
+    public static class MessageBrokerGenerator
+    {
+        public static readonly string ClassName = "MessageBroker";
+        public static readonly string Namespace = "Assets.Scripts.MessageBroker";
+        public static readonly string OutputFolder = $"Assets/Scripts/MessageBroker";
+        public static readonly string NL = "\r\n";
+
+        [MenuItem("Game/MessageBroker/Generate Message Broker Base")]
+        static void GenerateMessageBaseBroker()
         {
-            private static int count = 0;
-            private static readonly char indChar = '\t';
-
-            public static string Get() => new string(indChar, count);
-            public static string Push() { count++; return Get(); }
-            public static string Pop() { count--; count = Math.Max(0, count); return Get(); }
+            var mbg = new MessageBrokerGenerator.MessageBrokerBaseGenerator();
+            mbg.Generate();
         }
 
-        public void Generate()
+        [MenuItem("Game/MessageBroker/Generate Message Broker")]
+        static void GenerateMessageTypeBroker()
         {
-            MessageInfo[] messageInfos = GetAllMessages();
-
-            var sb = new StringBuilder();
-            this.AddUsings(sb);
-            this.OpenNamespace(sb);
-
-            this.OpenClassDeclaration(sb);
-
-            this.AddPrivateVariables(messageInfos, sb);
-
-            this.AddStart(messageInfos, sb);
-
-            foreach(var message in messageInfos)
-            {
-                this.AddMessageBlock(message, sb);
-            }
-
-            this.CloseClassDeclaration(sb);
-            this.CloseNamespace(sb);
-
-            System.IO.File.WriteAllText(OutputPath, sb.ToString());
+            var mbg = new MessageBrokerGenerator.MessageBrokerCategoryGenerator();
+            mbg.Generate();
         }
 
-        private void AddUsings(StringBuilder sb)
-        {
-            sb.AppendLine($"using UnityEngine;{NL}");
-            sb.AppendLine($"using UnityEditor;{NL}");
-        }
-
-        private void OpenNamespace(StringBuilder sb)
-        {
-            sb.AppendLine($"namespace {Namespace}");
-            sb.AppendLine($"{{");
-        }
-
-        private void CloseNamespace(StringBuilder sb)
-        {
-            sb.AppendLine($"{Indent.Pop()}}}");
-        }
-
-        private void OpenClassDeclaration(StringBuilder sb)
-        {
-            sb.AppendLine($"{Indent.Push()}public partial class {ClassName}");
-            sb.AppendLine($"{Indent.Get()}{{");
-        }
-
-        private void AddPrivateVariables(MessageInfo[] messageInfos, StringBuilder sb)
-        {
-            Indent.Push();
-            foreach (var messageInfo in messageInfos)
-            {
-                sb.AppendLine($"{Indent.Get()}private {nameof(RequestMessage)} m_{this.CleanName(messageInfo.Message.name)};");
-            }
-            Indent.Pop();
-        }
-
-        private void AddStart(MessageInfo[] messageInfos, StringBuilder sb)
-        {
-            sb.AppendLine($"{Indent.Push()}void Start()");
-            sb.AppendLine($"{Indent.Get()}{{");
-            Indent.Push();
-            foreach(var messageInfo in messageInfos)
-            {
-                sb.AppendLine($"{Indent.Get()}this.m_{CleanName(messageInfo.Message.name)} = AssetDatabase.LoadAssetAtPath<{nameof(RequestMessage)}>(\"{messageInfo.Path}\");");
-            }
-            Indent.Pop();
-            sb.AppendLine($"{Indent.Get()}}}");
-            Indent.Pop();
-        }
-
-
-        private string CleanName(string name)
-        {
-            return System.Text.RegularExpressions.Regex.Replace(name, @"[^a-zA-Z0-9_]", String.Empty);
-        }
-
-        private void AddMessageBlock(MessageInfo messageInfo, StringBuilder sb)
-        {
-            var name = CleanName(messageInfo.Message.name);
-            sb.AppendLine($"{Indent.Push()}public object Send_{name}(RequestMessagePayload payload)");
-            sb.Append($"{Indent.Get()}{{{NL}");
-
-            
-
-            sb.Append($"{Indent.Push()}return null;{NL}");
-            sb.Append($"{Indent.Pop()}}}{NL}");
-            Indent.Pop();
-        }
-
-        private void CloseClassDeclaration(StringBuilder sb)
-        {
-            sb.AppendLine($"{Indent.Get()}}}");
-        }
-
-
-
-        private MessageInfo[] GetAllMessages()
+        private static MessageInfo[] GetAllMessages()
         {
             string[] guids = AssetDatabase.FindAssets("t:" + typeof(RequestMessage).Name);
             var messageInfos = new MessageInfo[guids.Length];
@@ -147,26 +65,217 @@ namespace Assets.Scripts.MessageBroker
             return messageInfos;
         }
 
-
-        private string FindMessageBrokerPath()
+        private static string CleanName(string name)
         {
-            var assetIds = AssetDatabase.FindAssets(nameof(MessageBroker));
-            foreach (var assetId in assetIds)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(assetId);
-                var asset = AssetDatabase.LoadAssetAtPath<MessageBroker>(path);
-                if (asset != null)
-                {
-                    return path;
-                }
-            }
-            return null;
+            return System.Text.RegularExpressions.Regex.Replace(name, @"[^a-zA-Z0-9_]", String.Empty);
         }
+
 
         private class MessageInfo
         {
             public RequestMessage Message;
             public string Path;
+        }
+
+        internal class MessageBrokerCategoryGenerator
+        {
+
+            public void Generate()
+            {
+                MessageInfo[] messageInfos = GetAllMessages();
+
+                var groups = messageInfos.GroupBy(x => x.Message.Category);
+                
+                foreach(var group in groups)
+                {
+                    GenerateFilePerCategory(group);
+                }
+            }
+            private void GenerateFilePerCategory(IGrouping<string, MessageInfo> group)
+            {
+                var messageInfos = group.ToArray();
+
+                var sb = new StringBuilder();
+                this.AddHeader(sb);
+
+                this.AddUsings(sb);
+                this.OpenNamespace(sb);
+
+                this.OpenClassDeclaration(sb);
+
+                //this.AddPrivateVariables(messageInfos, sb);
+
+                //this.AddStartBlock(messageInfos, sb);
+
+                foreach (var message in messageInfos)
+                {
+                    this.AddSendMessageBlock(message, sb);
+                }
+
+                this.CloseClassDeclaration(sb);
+                this.CloseNamespace(sb);
+
+                var key = CleanName(String.IsNullOrWhiteSpace(group.Key) ? "Default" : group.Key);
+
+                CreateFile(sb, key);
+            }
+
+            private void CreateFile(StringBuilder sb, string category)
+            {
+                var outputPath = System.IO.Path.Combine(OutputFolder, $"{ClassName}.{category}.cs");
+
+                System.IO.File.WriteAllText(outputPath, sb.ToString());
+            }
+
+            private void AddHeader(StringBuilder sb)
+            {
+                sb.AppendLine($"// Code auto-generated by {nameof(MessageBrokerGenerator)}");
+                sb.AppendLine($"// Re-run the generator every time a new {nameof(RequestMessage)} is added or removed.");
+                sb.AppendLine();
+            }
+
+            private void AddUsings(StringBuilder sb)
+            {
+                sb.AppendLine($"using UnityEngine;");
+                sb.AppendLine($"using UnityEditor;");
+                sb.AppendLine();
+            }
+
+            private void OpenNamespace(StringBuilder sb)
+            {
+                sb.AppendLine($"namespace {Namespace}");
+                sb.AppendLine($"{{");
+            }
+
+            private void CloseNamespace(StringBuilder sb)
+            {
+                sb.AppendLine($"{Indent.Pop()}}}");
+            }
+
+            private void OpenClassDeclaration(StringBuilder sb)
+            {
+                sb.AppendLine($"{Indent.Push()}public partial class {ClassName}");
+                sb.AppendLine($"{Indent.Get()}{{");
+            }
+
+            private void AddSendMessageBlock(MessageInfo messageInfo, StringBuilder sb)
+            {
+                var name = CleanName(messageInfo.Message.name);
+                sb.AppendLine($"{Indent.Push()}public object Send_{name}(RequestMessagePayload payload)");
+                sb.AppendLine($"{Indent.Get()}{{");
+                Indent.Push();
+
+                sb.AppendLine($"{Indent.Get()}if (payload == null)");
+                sb.AppendLine($"{Indent.Get()}{{");
+                sb.AppendLine($"{Indent.Push()}Debug.LogWarning(\"Payload is null.\");");
+                sb.AppendLine($"{Indent.Get()}return null;");
+                sb.AppendLine($"{Indent.Pop()}}}");
+
+
+                sb.AppendLine($"{Indent.Get()}m_{name}.{nameof(RequestMessage.SendMessage)}(payload);");
+                sb.AppendLine();
+                sb.AppendLine($"{Indent.Get()}return payload.{nameof(RequestMessagePayload.payload)};");
+                sb.AppendLine($"{Indent.Pop()}}}");
+                Indent.Pop();
+            }
+
+            private void CloseClassDeclaration(StringBuilder sb)
+            {
+                sb.AppendLine($"{Indent.Get()}}}");
+            }
+        }
+
+        internal class MessageBrokerBaseGenerator
+        {
+            public void Generate()
+            {
+                MessageInfo[] messageInfos = GetAllMessages();
+
+                var sb = new StringBuilder();
+                this.AddHeader(sb);
+                this.AddUsings(sb);
+                this.OpenNamespace(sb);
+
+                this.OpenClassDeclaration(sb);
+
+                this.AddPrivateVariables(messageInfos, sb);
+
+                this.AddStartBlock(messageInfos, sb);
+
+                this.CloseClassDeclaration(sb);
+
+                this.CloseNamespace(sb);
+
+                CreateFile(sb);
+            }
+
+            private void AddHeader(StringBuilder sb)
+            {
+                sb.AppendLine($"// Code auto-generated by {nameof(MessageBrokerGenerator)}");
+                sb.AppendLine();
+            }
+
+            private void AddUsings(StringBuilder sb)
+            {
+                sb.AppendLine($"using UnityEngine;");
+                sb.AppendLine($"using UnityEditor;");
+                sb.AppendLine();
+            }
+
+            private void OpenNamespace(StringBuilder sb)
+            {
+                sb.AppendLine($"namespace {Namespace}");
+                sb.AppendLine($"{{");
+            }
+
+            private void CloseNamespace(StringBuilder sb)
+            {
+                sb.AppendLine($"{Indent.Pop()}}}");
+            }
+
+            private void OpenClassDeclaration(StringBuilder sb)
+            {
+                sb.AppendLine($"{Indent.Push()}public partial class {ClassName} : {nameof(MonoBehaviour)}");
+                sb.AppendLine($"{Indent.Get()}{{");
+            }
+
+            private void AddPrivateVariables(MessageInfo[] messageInfos, StringBuilder sb)
+            {
+                Indent.Push();
+                foreach (var messageInfo in messageInfos)
+                {
+                    sb.AppendLine($"{Indent.Get()}private {nameof(RequestMessage)} m_{CleanName(messageInfo.Message.name)};");
+                }
+                Indent.Pop();
+            }
+
+            private void AddStartBlock(MessageInfo[] messageInfos, StringBuilder sb)
+            {
+                sb.AppendLine($"{Indent.Push()}void Start()");
+                sb.AppendLine($"{Indent.Get()}{{");
+                Indent.Push();
+                foreach (var messageInfo in messageInfos)
+                {
+                    sb.AppendLine($"{Indent.Get()}this.m_{CleanName(messageInfo.Message.name)} = AssetDatabase.LoadAssetAtPath<{nameof(RequestMessage)}>(\"{messageInfo.Path}\");");
+                }
+                Indent.Pop();
+                sb.AppendLine($"{Indent.Get()}}}");
+                Indent.Pop();
+            }
+
+
+
+            private void CloseClassDeclaration(StringBuilder sb)
+            {
+                sb.AppendLine($"{Indent.Get()}}}");
+            }
+
+            private void CreateFile(StringBuilder sb)
+            {
+                var outputPath = System.IO.Path.Combine(OutputFolder, $"{ClassName}.cs");
+
+                System.IO.File.WriteAllText(outputPath, sb.ToString());
+            }
         }
     }
 }
