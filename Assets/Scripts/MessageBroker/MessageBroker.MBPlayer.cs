@@ -6,8 +6,17 @@ using UnityEditor;
 
 namespace Assets.Scripts.MessageBroker
 {
-	public partial class MessageBroker
+	public static partial class MessageBroker
 	{
+		public static MBPlayer Player = new MBPlayer();
+	}
+	public class MBPlayer
+	{
+		private RequestMessage m_RequestMessage1;
+		public MBPlayer()
+		{
+			this.m_RequestMessage1 = AssetDatabase.LoadAssetAtPath<RequestMessage>("Assets/Prefabs/MessageBroker/RequestMessage1.asset");
+		}
 		public object Send_RequestMessage1(RequestMessagePayload payload)
 		{
 			if (payload == null)

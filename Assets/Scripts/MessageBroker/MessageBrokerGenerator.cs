@@ -35,18 +35,20 @@ namespace Assets.Scripts.MessageBroker
         public static readonly string OutputFolder = $"Assets/Scripts/MessageBroker";
         public static readonly string NL = "\r\n";
 
-        [MenuItem("Game/MessageBroker/Generate Message Broker Base")]
-        static void GenerateMessageBaseBroker()
-        {
-            var mbg = new MessageBrokerGenerator.MessageBrokerBaseGenerator();
-            mbg.Generate();
-        }
+        //[MenuItem("Game/MessageBroker/Generate Message Broker Base")]
+        //static void GenerateMessageBaseBroker()
+        //{
+        //    var mbg = new MessageBrokerGenerator.MessageBrokerCommonGenerator();
+        //    mbg.Generate();
+        //}
 
         [MenuItem("Game/MessageBroker/Generate Message Broker")]
         static void GenerateMessageTypeBroker()
         {
             var mbg = new MessageBrokerGenerator.MessageBrokerCategoryGenerator();
             mbg.Generate();
+
+            // TODO: Start compilation of scripts.
         }
 
         private static MessageInfo[] GetAllMessages()
@@ -79,7 +81,6 @@ namespace Assets.Scripts.MessageBroker
 
         internal class MessageBrokerCategoryGenerator
         {
-
             public void Generate()
             {
                 MessageInfo[] messageInfos = GetAllMessages();
@@ -95,17 +96,26 @@ namespace Assets.Scripts.MessageBroker
             {
                 var messageInfos = group.ToArray();
 
+                var categoryName = CleanName(String.IsNullOrWhiteSpace(group.Key) ? "Unnamed" : group.Key);
+                var className = $"MB{categoryName}";
+
                 var sb = new StringBuilder();
                 this.AddHeader(sb);
 
                 this.AddUsings(sb);
                 this.OpenNamespace(sb);
 
-                this.OpenClassDeclaration(sb);
+                this.OpenCommonClassDeclaration(sb);
 
-                //this.AddPrivateVariables(messageInfos, sb);
+                this.AddCommonVariables(messageInfos, className, categoryName, sb);
 
-                //this.AddStartBlock(messageInfos, sb);
+                this.CloseCommonClassDeclaration(sb);
+
+                this.OpenClassDeclaration(sb, className);
+
+                this.AddPrivateVariables(messageInfos, sb);
+
+                this.AddConstructorBlock(messageInfos, className, sb);
 
                 foreach (var message in messageInfos)
                 {
@@ -115,9 +125,8 @@ namespace Assets.Scripts.MessageBroker
                 this.CloseClassDeclaration(sb);
                 this.CloseNamespace(sb);
 
-                var key = CleanName(String.IsNullOrWhiteSpace(group.Key) ? "Default" : group.Key);
 
-                CreateFile(sb, key);
+                CreateFile(sb, className);
             }
 
             private void CreateFile(StringBuilder sb, string category)
@@ -152,11 +161,53 @@ namespace Assets.Scripts.MessageBroker
                 sb.AppendLine($"{Indent.Pop()}}}");
             }
 
-            private void OpenClassDeclaration(StringBuilder sb)
+            private void OpenCommonClassDeclaration(StringBuilder sb)
             {
-                sb.AppendLine($"{Indent.Push()}public partial class {ClassName}");
+                sb.AppendLine($"{Indent.Push()}public static partial class {ClassName}");
                 sb.AppendLine($"{Indent.Get()}{{");
             }
+
+            private void OpenClassDeclaration(StringBuilder sb, string className)
+            {
+                sb.AppendLine($"{Indent.Get()}public class {className}");
+                sb.AppendLine($"{Indent.Get()}{{");
+            }
+
+            private void AddCommonVariables(MessageInfo[] messageInfos, string className, string variableName, StringBuilder sb)
+            {
+                Indent.Push();
+                foreach (var messageInfo in messageInfos)
+                {
+                    sb.AppendLine($"{Indent.Get()}public static {className} {variableName} = new {className}();");
+                }
+                Indent.Pop();
+            }
+
+
+            private void AddPrivateVariables(MessageInfo[] messageInfos, StringBuilder sb)
+            {
+                Indent.Push();
+                foreach (var messageInfo in messageInfos)
+                {
+                    sb.AppendLine($"{Indent.Get()}private {nameof(RequestMessage)} m_{CleanName(messageInfo.Message.name)};");
+                }
+                Indent.Pop();
+            }
+
+            private void AddConstructorBlock(MessageInfo[] messageInfos, string className, StringBuilder sb)
+            {
+                sb.AppendLine($"{Indent.Push()}public {className}()");
+                sb.AppendLine($"{Indent.Get()}{{");
+                Indent.Push();
+                foreach (var messageInfo in messageInfos)
+                {
+                    sb.AppendLine($"{Indent.Get()}this.m_{CleanName(messageInfo.Message.name)} = AssetDatabase.LoadAssetAtPath<{nameof(RequestMessage)}>(\"{messageInfo.Path}\");");
+                }
+                Indent.Pop();
+                sb.AppendLine($"{Indent.Get()}}}");
+                Indent.Pop();
+            }
+
 
             private void AddSendMessageBlock(MessageInfo messageInfo, StringBuilder sb)
             {
@@ -183,9 +234,14 @@ namespace Assets.Scripts.MessageBroker
             {
                 sb.AppendLine($"{Indent.Get()}}}");
             }
+
+            private void CloseCommonClassDeclaration(StringBuilder sb)
+            {
+                sb.AppendLine($"{Indent.Get()}}}");
+            }
         }
 
-        internal class MessageBrokerBaseGenerator
+        internal class MessageBrokerCommonGenerator
         {
             public void Generate()
             {
@@ -193,14 +249,14 @@ namespace Assets.Scripts.MessageBroker
 
                 var sb = new StringBuilder();
                 this.AddHeader(sb);
-                this.AddUsings(sb);
+                //this.AddUsings(sb);
                 this.OpenNamespace(sb);
 
                 this.OpenClassDeclaration(sb);
 
-                this.AddPrivateVariables(messageInfos, sb);
+                //this.AddPrivateVariables(messageInfos, sb);
 
-                this.AddStartBlock(messageInfos, sb);
+                //this.AddStartBlock(messageInfos, sb);
 
                 this.CloseClassDeclaration(sb);
 
@@ -235,7 +291,7 @@ namespace Assets.Scripts.MessageBroker
 
             private void OpenClassDeclaration(StringBuilder sb)
             {
-                sb.AppendLine($"{Indent.Push()}public partial class {ClassName} : {nameof(MonoBehaviour)}");
+                sb.AppendLine($"{Indent.Push()}public static partial class {ClassName}");
                 sb.AppendLine($"{Indent.Get()}{{");
             }
 
@@ -262,8 +318,6 @@ namespace Assets.Scripts.MessageBroker
                 sb.AppendLine($"{Indent.Get()}}}");
                 Indent.Pop();
             }
-
-
 
             private void CloseClassDeclaration(StringBuilder sb)
             {
