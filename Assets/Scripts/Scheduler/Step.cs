@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets.Scripts.Scheduler
 {
     [Serializable]
-    public class Step
+    class Step
     {
         public AgentSO Agent;
 

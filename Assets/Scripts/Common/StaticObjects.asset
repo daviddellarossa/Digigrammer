@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3a592b29a3970048b7929ae71ab9492, type: 3}
-  m_Name: RequestMessage2
+  m_Script: {fileID: 11500000, guid: 91e38f5de33be83429623bd591075017, type: 3}
+  m_Name: StaticObjects
   m_EditorClassIdentifier: 
-  Tooltip: Tooltip for Request Message 2
-  MessageEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  _messageBroker: {fileID: 1303379550521457898, guid: 5a0f74c225be7f6498e144e9adec956f, type: 3}

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets.Scripts.Agents
 {
     [CreateAssetMenu(menuName = "Digigrammer/Agent", fileName = "New Agent")]
-    public class AgentSO : ScriptableObject
+    class AgentSO : ScriptableObject
     {
         [SerializeField] private AgentSettings settings;
         [SerializeField] private ComputeShader shader;

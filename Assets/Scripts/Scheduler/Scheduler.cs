@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets.Scripts.Scheduler
 {
     [Serializable]
-    public class Scheduler
+    class Scheduler
     {
         //[SerializeField] private MessageBroker.MessageBroker Messenger;
 

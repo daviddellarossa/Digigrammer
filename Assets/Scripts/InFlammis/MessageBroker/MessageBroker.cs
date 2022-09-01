@@ -19,5 +19,8 @@ namespace InFlammis.MessageBroker
 		/// <inheritdoc/>
 		public MBApp App { get; } = new MBApp();
 
+		/// <inheritdoc/>
+		public MBRender Render { get; } = new MBRender();
+
 	}
 }

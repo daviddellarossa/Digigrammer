@@ -1,37 +1,50 @@
-using Assets.Scripts.Agents.Agent1;
 using Assets.Scripts.Scheduler;
-using System.Collections;
-using System.Collections.Generic;
+using Digigrammer.Assets.Scripts.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Canvas))]
-public class Digigrammer : MonoBehaviour
+namespace Digigrammer.Assets.Scripts
 {
-    [SerializeField] private DigigramSO digigram;
-    //[SerializeField] private MessageBroker messenger;
-
-    private RawImage rawImage;
-
-    private Scheduler scheduler;
-
-
-    private void Awake() 
+    [RequireComponent(typeof(Canvas))]
+    public class Digigrammer : MonoBehaviour
     {
-        this.scheduler = new Scheduler();
+        [Header("Configuration")]
+        [Space]
+        [SerializeField] private StaticObjectsSO staticObjects;
 
-        this.rawImage = GetComponentInChildren<RawImage>();
+        [Space]
+        [SerializeField] private DigigramSO digigram;
 
-        if(this.rawImage == null){
-            Debug.LogError("RawImage is not found");
+        private RawImage rawImage;
+
+        private Scheduler scheduler;
+
+
+        private void Awake()
+        {
+            this.staticObjects.MessageBroker.App.Send_Startup(this, null);
+
+            this.scheduler = new Scheduler();
+
+            this.rawImage = GetComponentInChildren<RawImage>();
+
+            if (this.rawImage == null)
+            {
+                Debug.LogError("RawImage is not found");
+            }
         }
-    }
 
-    private void Start() 
-    {
-        this.digigram.InitializeTexture();
-        //Graphics.Blit(mask, digigram.Texture);
+        private void Start()
+        {
+            this.digigram.InitializeTexture();
+            //Graphics.Blit(mask, digigram.Texture);
 
-        this.rawImage.texture = this.digigram.Texture;
+            this.rawImage.texture = this.digigram.Texture;
+        }
+
+        private void OnDestroy()
+        {
+            this.staticObjects.MessageBroker.App.Send_Shutdown(this, null);
+        }
     }
 }

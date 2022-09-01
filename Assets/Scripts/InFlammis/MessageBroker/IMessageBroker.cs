@@ -18,5 +18,10 @@ namespace InFlammis.MessageBroker
 		/// </summary>
 		MBApp App { get; }
 
+		/// <summary>
+		/// Message Broker for `Render` category
+		/// </summary>
+		MBRender Render { get; }
+
 	}
 }

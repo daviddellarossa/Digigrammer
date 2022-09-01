@@ -1,14 +1,15 @@
+using Digigrammer.Assets.Scripts.Common;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Digigrammer/Digigram", fileName = "Digigram")]
 
-public class DigigramSO : ScriptableObject
+class DigigramSO : ScriptableObject
 {
-    //[SerializeField] private MessageBroker messenger;
+    [HideInInspector] public StaticObjectsSO staticObjects;
 
-    [HideInInspector]
-    public RenderTexture Texture;
+    [HideInInspector] public RenderTexture Texture;
 
+    [Space]
     public Vector2Int TextureSize = new (1080, 1080);
 
     public int BitsPerChannel = 16;
@@ -18,6 +19,7 @@ public class DigigramSO : ScriptableObject
     public void InitializeTexture()
     {
         this.Texture = new RenderTexture(this.TextureSize.x, this.TextureSize.y, this.BitsPerChannel * Channels);
-        //messenger.UpdateTexture.SendMessage(this, null, this.Texture);
+
+        this.staticObjects.MessageBroker.Render.Send_TextureUpdated(this, null, this.Texture);
     }
 }

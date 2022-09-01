@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3a592b29a3970048b7929ae71ab9492, type: 3}
-  m_Name: RequestMessage1
+  m_Script: {fileID: 11500000, guid: 403a2673e3bc0ac4d8fcaec4222687d0, type: 3}
+  m_Name: LogManager Settings
   m_EditorClassIdentifier: 
-  Tooltip: Tooltip for Request Message 1
-  Category: Player
-  MessageEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  _logEnabled: 1
+  _filterLevel: 0

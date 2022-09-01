@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Scheduler
 {
-    public interface IStep : IBaseStep
+    interface IStep : IBaseStep
     {
         public AgentSO Agent { get; }
 
