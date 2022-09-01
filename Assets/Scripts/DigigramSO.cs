@@ -1,4 +1,3 @@
-using Assets.Scripts.MessageBroker;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Digigrammer/Digigram", fileName = "Digigram")]

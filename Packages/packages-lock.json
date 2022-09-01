@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.inflammis.messagebroker": {
+      "version": "https://github.com/InFlammis/com.inflammis.messagebroker.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "955ee654cdf758937039a8d86a1b9e36811a451c"
+    },
     "com.unity.2d.animation": {
       "version": "7.0.5",
       "depth": 1,
