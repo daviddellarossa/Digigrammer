@@ -4,12 +4,12 @@ namespace Assets.Scripts.Scheduler
 {
     interface IStep : IBaseStep
     {
-        public AgentSO Agent { get; }
+        IAgent Agent { get; }
 
-        public Mask Mask { get; }
+        IMask Mask { get; }
 
-        public float Amount { get; }
+        float Amount { get; }
 
-        public float Duration { get; }
+        float Duration { get; }
     }
 }

@@ -5,15 +5,15 @@ using UnityEngine;
 namespace Assets.Scripts.Scheduler
 {
     [Serializable]
-    class Step
+    class Step : IStep
     {
-        public AgentSO Agent;
+        public IAgent Agent { get; set; }
 
-        public Mask Mask;
+        public IMask Mask { get; set; }
 
-        public float Amount;
+        public float Amount { get; set; }
 
-        public float Duration;
+        public float Duration { get; set; }
 
         public void Execute()
         {
