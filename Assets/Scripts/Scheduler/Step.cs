@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Agents;
+using Assets.Scripts.Masks;
 using System;
 using UnityEngine;
 
