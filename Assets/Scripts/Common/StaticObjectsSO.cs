@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-namespace Digigrammer.Assets.Scripts.Common
+namespace Assets.Scripts.Common
 {
     [CreateAssetMenu(menuName = "Digigrammer/Static Objects Container", fileName = "StaticObjects")]
     class StaticObjectsSO : ScriptableObject

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Scheduler;
+﻿using Assets.Scripts.Digigram;
+using Assets.Scripts.Scheduler;
 using System;
 using UnityEngine;
 
