@@ -37,7 +37,7 @@ namespace Assets.Scripts.Digigram
             StaticObjects.MessageBroker.Render.Send_TextureUpdated(this, null, Texture);
         }
 
-        public void AddAgent(AgentSO agent)
+        public void AddAgent(IAgent agent)
         {
             if (agents.Contains(agent))
             {
@@ -47,7 +47,7 @@ namespace Assets.Scripts.Digigram
             agents.Add(agent);
         }
 
-        public void AddInteractor(InteractorSO interactor)
+        public void AddInteractor(IInteractor interactor)
         {
             var interactorId = interactor.GetId();
             if (interactors.ContainsKey(interactorId))
