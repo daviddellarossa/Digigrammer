@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Digigrammer.Assets.Scripts.InFlammis.LogManagement
+namespace Assets.Scripts.InFlammis.LogManagement
 {
     [CreateAssetMenu(menuName = "InFlammis/MessageBroker/LogManager Settings", fileName = "LogManager Settings")]
     public class LogManagerSettingsSO : ScriptableObject

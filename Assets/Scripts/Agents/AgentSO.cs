@@ -1,14 +1,19 @@
-﻿using Assets.Scripts.Scheduler;
+﻿using Assets.Scripts.Digigram;
+using Assets.Scripts.Scheduler;
 using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Agents
 {
     [CreateAssetMenu(menuName = "Digigrammer/Agent", fileName = "New Agent")]
-    class AgentSO : ScriptableObject
+    class AgentSO : ScriptableObject, IAgent
     {
         [SerializeField] private AgentSettings settings;
         [SerializeField] private ComputeShader shader;
+
+        public AgentSettings Settings => settings;
+
+        public ComputeShader Shader => shader;
 
         public void ExecuteShader(DigigramSO digigram, Mask mask)
         {

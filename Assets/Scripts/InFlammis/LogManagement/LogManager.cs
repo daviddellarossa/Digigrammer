@@ -1,8 +1,8 @@
-﻿using Digigrammer.Assets.Scripts.Common;
+﻿using Assets.Scripts.Common;
 using System;
 using UnityEngine;
 
-namespace Digigrammer.Assets.Scripts.InFlammis.LogManagement
+namespace Assets.Scripts.InFlammis.LogManagement
 {
     class LogManager : MonoBehaviour
     {

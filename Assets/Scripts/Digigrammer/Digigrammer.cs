@@ -1,9 +1,10 @@
+using Assets.Scripts.Digigram;
+using Assets.Scripts.Common;
 using Assets.Scripts.Scheduler;
-using Digigrammer.Assets.Scripts.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Digigrammer.Assets.Scripts
+namespace Assets.Scripts.Digigrammer
 {
     [RequireComponent(typeof(Canvas))]
     public class Digigrammer : MonoBehaviour
@@ -17,18 +18,18 @@ namespace Digigrammer.Assets.Scripts
 
         private RawImage rawImage;
 
-        private Scheduler scheduler;
+        private IScheduler scheduler;
 
 
         private void Awake()
         {
-            this.staticObjects.MessageBroker.App.Send_Startup(this, null);
+            staticObjects.MessageBroker.App.Send_Startup(this, null);
 
-            this.scheduler = new Scheduler();
+            scheduler = new Scheduler.Scheduler();
 
-            this.rawImage = GetComponentInChildren<RawImage>();
+            rawImage = GetComponentInChildren<RawImage>();
 
-            if (this.rawImage == null)
+            if (rawImage == null)
             {
                 Debug.LogError("RawImage is not found");
             }
@@ -36,15 +37,15 @@ namespace Digigrammer.Assets.Scripts
 
         private void Start()
         {
-            this.digigram.InitializeTexture();
+            digigram.InitializeTexture();
             //Graphics.Blit(mask, digigram.Texture);
 
-            this.rawImage.texture = this.digigram.Texture;
+            rawImage.texture = digigram.Texture;
         }
 
         private void OnDestroy()
         {
-            this.staticObjects.MessageBroker.App.Send_Shutdown(this, null);
+            staticObjects.MessageBroker.App.Send_Shutdown(this, null);
         }
     }
 }
