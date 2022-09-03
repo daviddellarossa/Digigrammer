@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Interactions
 {
-    public interface IInteractor<TAgent1, TAgent2>
+    interface IInteractor<TAgent1, TAgent2>
         where TAgent1 : IAgent
         where TAgent2 : IAgent
     {

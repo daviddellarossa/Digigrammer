@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Digigram;
-using Assets.Scripts.Scheduler;
+using Assets.Scripts.Masks;
 using System;
 using UnityEngine;
 
@@ -8,14 +8,11 @@ namespace Assets.Scripts.Agents
     [CreateAssetMenu(menuName = "Digigrammer/Agent", fileName = "New Agent")]
     class AgentSO : ScriptableObject, IAgent
     {
-        [SerializeField] private AgentSettings settings;
         [SerializeField] private ComputeShader shader;
-
-        public AgentSettings Settings => settings;
 
         public ComputeShader Shader => shader;
 
-        public void ExecuteShader(DigigramSO digigram, Mask mask)
+        public void ExecuteShader(IDigigram digigram, IMask mask)
         {
             this.shader.SetTexture(0, "texture", digigram.Texture);
             this.shader.SetTexture(0, "mask", mask.Texture);

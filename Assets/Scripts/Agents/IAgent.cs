@@ -1,12 +1,14 @@
+using Assets.Scripts.Digigram;
+using Assets.Scripts.Masks;
 using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Agents
 {
-    public interface IAgent
+    interface IAgent
     {
-        public AgentSettings Settings { get; }
+        ComputeShader Shader { get; }
 
-        public ComputeShader Shader { get; }
+        void ExecuteShader(IDigigram digigram, IMask mask);
     }
 }
