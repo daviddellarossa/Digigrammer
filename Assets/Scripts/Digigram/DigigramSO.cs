@@ -1,5 +1,6 @@
 using Assets.Scripts.Agents;
 using Assets.Scripts.Common;
+using Assets.Scripts.Interactions;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ namespace Assets.Scripts.Digigram
         [SerializeField] private readonly int channels = 3;
 
         private List<IAgent> agents = new();
+
+        private Dictionary<int, IInteractor> interactors = new();
 
         public StaticObjectsSO StaticObjects { get; set; }
 
@@ -34,7 +37,7 @@ namespace Assets.Scripts.Digigram
             StaticObjects.MessageBroker.Render.Send_TextureUpdated(this, null, Texture);
         }
 
-        public void AddAgent(IAgent agent)
+        public void AddAgent(AgentSO agent)
         {
             if (agents.Contains(agent))
             {
@@ -42,6 +45,17 @@ namespace Assets.Scripts.Digigram
             }
 
             agents.Add(agent);
+        }
+
+        public void AddInteractor(InteractorSO interactor)
+        {
+            var interactorId = interactor.GetId();
+            if (interactors.ContainsKey(interactorId))
+            {
+                Debug.Log($"Interactor with id {interactorId} already in dictionary");
+                return;
+            }
+            interactors.Add(interactorId, interactor);
         }
     }
 }

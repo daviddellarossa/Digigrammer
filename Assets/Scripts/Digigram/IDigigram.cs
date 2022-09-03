@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Agents;
 using Assets.Scripts.Common;
+using Assets.Scripts.Interactions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,9 @@ namespace Assets.Scripts.Digigram
 
         void InitializeTexture();
 
-        void AddAgent(IAgent agent);
+        void AddAgent(AgentSO agent);
+
+        void AddInteractor(InteractorSO interactor);
 
     }
 }
