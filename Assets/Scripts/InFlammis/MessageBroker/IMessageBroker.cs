@@ -19,6 +19,16 @@ namespace InFlammis.MessageBroker
 		MBApp App { get; }
 
 		/// <summary>
+		/// Message Broker for `Digigram` category
+		/// </summary>
+		MBDigigram Digigram { get; }
+
+		/// <summary>
+		/// Message Broker for `Interaction` category
+		/// </summary>
+		MBInteraction Interaction { get; }
+
+		/// <summary>
 		/// Message Broker for `Render` category
 		/// </summary>
 		MBRender Render { get; }

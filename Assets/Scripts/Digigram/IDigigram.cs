@@ -25,7 +25,7 @@ namespace Assets.Scripts.Digigram
 
         void InitializeTexture();
 
-        void AddAgent(AgentSO agent);
+        void AddAgent(AgentSO agent, Texture2D agentBuffer);
 
         void AddInteractor(InteractorSO interactor);
 
