@@ -13,7 +13,7 @@ namespace Assets.Scripts.Digigram
 {
     interface IDigigram
     {
-        StaticObjectsSO StaticObjects { get; set; }
+        StaticObjectsSO StaticObjects { get; }
 
         RenderTexture Texture { get; set; }
 

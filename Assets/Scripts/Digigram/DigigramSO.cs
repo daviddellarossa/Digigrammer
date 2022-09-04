@@ -14,18 +14,20 @@ namespace Assets.Scripts.Digigram
 
         [Space]
         [Header("Configuration")]
+        [SerializeField] private StaticObjectsSO staticObjects;
+        [Space]
         [SerializeField] private Vector2Int textureSize = new(1080, 1080);
         [SerializeField] private int bitsPerChannel = 16;
         [SerializeField] private readonly int channels = 3;
 
         [Header("Shaders")]
-        [SerializeField] private ComputeShader addAgentBufferCS;
+        [SerializeField] private ComputeShader addAgentBuffer;
 
         private Dictionary<int, AgentBuffer> agents = new();
 
         private Dictionary<int, IInteractor> interactors = new();
 
-        public StaticObjectsSO StaticObjects { get; set; }
+        public StaticObjectsSO StaticObjects  => staticObjects;
 
         public RenderTexture Texture { get; set; }
 
@@ -113,10 +115,10 @@ namespace Assets.Scripts.Digigram
                 else
                 {
                     var currentAgent = agents[agent.GetInstanceID()];
-                    this.addAgentBufferCS.SetTexture(0, "texture1", currentAgent.Buffer);
-                    this.addAgentBufferCS.SetTexture(0, "texture2", agentBuffer);
+                    this.addAgentBuffer.SetTexture(0, "texture1", currentAgent.Buffer);
+                    this.addAgentBuffer.SetTexture(0, "texture2", agentBuffer);
 
-                    this.addAgentBufferCS.Dispatch(0, 8, 8, 8);
+                    this.addAgentBuffer.Dispatch(0, 8, 8, 8);
 
                     // TODO: READ THE TEXTURE BACK
                 }
