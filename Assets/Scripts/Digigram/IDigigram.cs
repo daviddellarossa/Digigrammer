@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Agents;
 using Assets.Scripts.Common;
+using Assets.Scripts.Interactions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Assets.Scripts.Digigram
 {
     interface IDigigram
     {
-        StaticObjectsSO StaticObjects { get; set; }
+        StaticObjectsSO StaticObjects { get; }
 
         RenderTexture Texture { get; set; }
 
@@ -24,7 +25,9 @@ namespace Assets.Scripts.Digigram
 
         void InitializeTexture();
 
-        void AddAgent(IAgent agent);
+        void AddAgent(AgentSO agent, Texture2D agentBuffer);
+
+        void AddInteractor(InteractorSO interactor);
 
     }
 }

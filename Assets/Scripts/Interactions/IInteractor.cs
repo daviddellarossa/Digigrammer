@@ -1,14 +1,20 @@
 ﻿using Assets.Scripts.Agents;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Interactions
 {
-    interface IInteractor<TAgent1, TAgent2>
-        where TAgent1 : IAgent
-        where TAgent2 : IAgent
+    interface IInteractor
     {
-        TAgent1 Agent1 { get; }
-        TAgent2 Agent2 { get; }
+        List<AgentSO> InAgents { get; }
+
+        List<AgentSO> OutAgents { get; }
+
+        ComputeShader Shader { get; }
 
         void Interact();
+
+        int GetId();
+
     }
 }

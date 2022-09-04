@@ -20,6 +20,12 @@ namespace InFlammis.MessageBroker
 		public MBApp App { get; } = new MBApp();
 
 		/// <inheritdoc/>
+		public MBDigigram Digigram { get; } = new MBDigigram();
+
+		/// <inheritdoc/>
+		public MBInteraction Interaction { get; } = new MBInteraction();
+
+		/// <inheritdoc/>
 		public MBRender Render { get; } = new MBRender();
 
 	}
