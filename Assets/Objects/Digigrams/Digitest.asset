@@ -7,12 +7,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f5420b9ceb2b6d4e81e83d5d9af65d7, type: 3}
   m_Name: Digitest
   m_EditorClassIdentifier: 
-  StaticObjects: {fileID: 0}
-  Texture: {fileID: 0}
-  TextureSize: {x: 1080, y: 1080}
-  BitsPerChannel: 16
+  staticObjects: {fileID: 11400000, guid: 27b073e7f60c0f84181ddc8f81bb39c3, type: 2}
+  textureSize: {x: 1080, y: 1080}
+  bitsPerChannel: 16
+  addAgentBuffer: {fileID: 0}
